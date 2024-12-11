@@ -1,0 +1,14 @@
+[project]
+name = "notesapp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.1.0",
+    "flask-session>=0.8.0",
+    "gunicorn>=23.0.0",
+    "python-dotenv>=1.0.1",
+    "ruff>=0.8.2",
+    "ruff-lsp>=0.0.59",
+]

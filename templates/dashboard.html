@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h3>Add a Note</h3>
+<form method="post" action="{{ url_for('add_note') }}">
+    <label for="task">Task:</label>
+    <input type="text" id="task" name="task" required>
+    <br>
+    <button type="submit">Add Note</button>
+</form>
+<h2>Your Notes</h2>
+<ul>
+    {% for note in notes %}
+        <li>{{ note[1] }}</li>
+    {% else %}
+        <li>No notes found. Add some!</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
+
