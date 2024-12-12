@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-notes-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-notes-app
+  template:
+    metadata:
+      labels:
+        app: flask-notes-app
+    spec:
+      containers:
+        - name: flask-notes-app
+          image: kenway213beep301/flask-notes-app:latest
+          ports:
+            - containerPort: 5000
+          livenessProbe: null
+          readinessProbe: null
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-notes-service 
+spec:
+  selector:
+    app: flask-notes-app
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 31009
