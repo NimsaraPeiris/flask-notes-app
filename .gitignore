@@ -11,6 +11,3 @@ wheels/
 
 # environment Variables
 .env
-
-#WIP
-flask-deployment.yml
