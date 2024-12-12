@@ -19,19 +19,19 @@
 
 ## Setup and run locally
 
-1. clone the repository to your local machine:
+1. Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/Chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 
-2. Start Minikube If not running yet.
+2. Start Minikube If not running yet:
 ```bash
 minikube start
 ```
 
-3. Get the Minikube IP (which you'll use to access the app)
+3. Get the Minikube IP (which you'll use to access the app):
 
 ```bash
 minikube ip
@@ -43,7 +43,7 @@ minikube ip
 kubectl apply -f deployment.yml
 ```
 
-This will create a Deployment with 3 replicas and a NodePort service for external access.
+This will create a Deployment with 3 replicas and a NodePort service for external access:
 
 5. Check if the pods and services are running correctly:
 
@@ -52,7 +52,7 @@ kubectl get pods
 kubectl get svc flask-notes-service
 ```
 
-6. Open a seperate terminal window and start Minikube tunnel to expose the service to your local machine (you should keep this running until you finish working with the app)
+6. Open a seperate terminal window and start Minikube tunnel to expose the service to your local machine (you should keep this running until you finish working with the app):
 
 ```bash
 minikube tunnel
