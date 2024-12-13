@@ -1,23 +1,19 @@
-### A Simple Notes app for the Cloud application Development Module: Group project
+## A Simple Notes app for the Cloud application Development Module: Group project
 
-## Table of Contents
+### Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Clone the Repository](#clone-the-repository)
 - [Setup and Run Locally](#setup-and-run-locally)
-  - [Minikube Setup](#minikube-setup)
-  - [Kubernetes Setup](#kubernetes-setup)
-  - [Accessing the App](#accessing-the-app)
 - [Troubleshooting](#troubleshooting)
 
-## Prerequisites
+### Prerequisites
 
 - [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/get-started)
 - [Minikube](https://minikube.sigs.k8s.io/docs/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-## Setup and run locally
+### Setup and run locally
 
 1. Clone the repository to your local machine:
 
@@ -69,7 +65,7 @@ http://<minikube-ip>:31009
 Replace <minikube-ip> with the IP you got from the minikube ip command.
 You should now see the Flask Notes app running locally.
 
-## Troubleshooting
+### Troubleshooting
 
 1. "Connection Refused" Error: If you're unable to access the app, ensure that Minikube is running, the tunnel is up, and the correct IP is being used. You can check the service by running:
 
