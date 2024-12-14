@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import logging
@@ -160,6 +160,10 @@ def logout():
     session.pop('user_id', None)  # Remove user_id from session
     return redirect(url_for('login'))
 
+# Health check route (not used in the k8s deployment.yml)
+@app.route('/_status/healthz', methods=['GET'])
+def healthz():
+    return jsonify({"status": "healthy"}), 200
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=False)
-
