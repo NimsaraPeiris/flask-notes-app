@@ -17,6 +17,12 @@ spec:
           image: kenway213beep301/flask-notes-app:latest
           ports:
             - containerPort: 5000
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: flask-notes-secret
+                  key: SECRET_KEY
           livenessProbe: null
           readinessProbe: null
 ---
