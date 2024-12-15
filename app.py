@@ -23,32 +23,37 @@ if not app.debug:
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
+db_path = "/app/database/database.db"
 
-def init_db():
-    conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
+def init_db():    
+    if not os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
 
-    cursor.execute(
+        cursor.execute(
+            """
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+            )
         """
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
         )
-    """
-    )
-    cursor.execute(
+        cursor.execute(
+            """
+        CREATE TABLE IF NOT EXISTS notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+            )
         """
-    CREATE TABLE IF NOT EXISTS notes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task TEXT NOT NULL,
-        user_id INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id)
         )
-    """
-    )
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        app.logger.info("Database and tables created successfully!")
+    else:
+        app.logger.info("Database already exists")
 
 
 # Initialize the databse
@@ -58,7 +63,7 @@ with app.app_context():
 
 # Function to connect to the SQLite database
 def get_db_connection():
-    conn = sqlite3.connect("databse.db")
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -74,7 +79,7 @@ def register():
         hashed_password = generate_password_hash(password)
 
         # Connect to the db and insert the user
-        with sqlite3.connect("database.db") as conn:
+        with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
 
             # Check if the given username is taken
@@ -105,7 +110,7 @@ def login():
         password = request.form["password"]
 
         # Check the user credentails
-        with sqlite3.connect("database.db") as conn:
+        with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
             user = cursor.fetchone()
@@ -128,7 +133,7 @@ def dashboard():
     user_id = session["user_id"]
 
     # Fetch the notes for the logged-in user
-    with sqlite3.connect("database.db") as conn:
+    with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM notes WHERE user_id = ?", (user_id,))
         user_notes = cursor.fetchall()
@@ -146,7 +151,7 @@ def add_note():
     user_id = session["user_id"]
 
     # Insert the new note into the database
-    with sqlite3.connect("database.db") as conn:
+    with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO notes (task, user_id) VALUES (?, ?)", (task, user_id)
