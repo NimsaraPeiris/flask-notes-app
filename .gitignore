@@ -5,6 +5,7 @@ build/
 dist/
 wheels/
 *.egg-info
+app.log
 
 # database file
 database.db
