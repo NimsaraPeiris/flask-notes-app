@@ -23,7 +23,8 @@ if not app.debug:
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
-db_path = "/app/database/database.db"
+# Get the current working directory and append database/database.db path
+db_path = os.path.join(os.getcwd(), "database", "database.db")
 
 def init_db():    
     if not os.path.exists(db_path):
