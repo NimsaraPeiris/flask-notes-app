@@ -1,5 +1,10 @@
 ## A Simple Notes app for the Cloud application Development Module: Group project
 
+GitHub Actions(CI/CD) Status: <br>
+![Build Status](https://github.com/Chamal1120/flask-notes-app/actions/workflows/ci.yml/badge.svg)
+
+##
+
 ### Table of Contents
 
 - [Prerequisites](#prerequisites)
@@ -22,7 +27,7 @@
 1. clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/chamal1120/flask-notes-app.git
+git clone https://github.com/Chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 
@@ -45,7 +50,7 @@ uv run flask run
 1. clone the repository to your local machine (if you already haven't):
 
 ```bash
-git clone https://github.com/chamal1120/flask-notes-app.git
+git clone https://github.com/Chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 
@@ -68,7 +73,7 @@ docker run -v $(pwd)/database:/app/database -p 5000:5000 flask-notes-app
 1. clone the repository to your local machine (if you already haven't):
 
 ```bash
-git clone https://github.com/chamal1120/flask-notes-app.git
+git clone https://github.com/Chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 

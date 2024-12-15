@@ -1,4 +1,4 @@
-name: Push Flask Notes App Docker Image
+name: Build and push the docker image
 
 on:
   push:
