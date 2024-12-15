@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     <title>{% block title %}Flask App{% endblock %}</title>
 </head>
 <body>
@@ -19,17 +20,13 @@
                 {% endif %}
             </ul>
         </nav>
-        <hr>
     </header>
     <main>
         {% block content %}
         {% endblock %}
     </main>
     <footer>
-        <hr>
         <p>&copy; SLTC Cloud Application Development Assignment</p>
     </footer>
 </body>
 </html>
-
-

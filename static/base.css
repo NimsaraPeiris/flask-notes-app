@@ -1,0 +1,134 @@
+/* Reset exisiting css properties */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+    header, footer {
+    background: none;
+    border: none;
+  }
+}
+
+/* Define color variables */
+:root {
+--pale-dogwood: #f7d1cdff;
+--fairy-tale: #e8c2caff;
+--thistle: #d1b3c4ff;
+--rose-quartz: #b392acff;
+--chinese-violet: #735d78ff;
+}
+
+/* Let take 100% height of vp */
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Apply global rules */
+body {
+  max-width: 800px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0 5rem;
+  color: var(--pale-dogwood);
+  background-color: var(--chinese-violet);
+}
+
+/* Let main take whetever height is left unused */
+main {
+  flex: 1;
+}
+
+/* Navbar styles */
+nav ul { display: flex; }
+nav ul li {
+  list-style-type: none;
+  flex-direction: row;
+  font-size: .7rem;
+  background-color: var(--pale-dogwood);
+  padding: .3rem 1rem;
+  margin: .5rem .5rem;
+  border: none;
+  border-radius: .5rem;
+  cursor: pointer;
+  text-align: center;
+}
+nav ul li:first-child{
+  margin-left: 0;
+}
+nav ul a {
+  text-decoration: none; 
+  color: var(--chinese-violet) 
+}
+
+
+/* Main title */
+h1 { 
+  color: var(--fairy-tale);
+  padding: 2rem 0;
+}
+
+/* style for buttons */
+button {
+  color: var(--chinese-violet);
+  background-color: var(--pale-dogwood);
+  padding: .3rem 1rem;
+  margin: .5rem 0;
+  border: none;
+  border-radius: .5rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Form tag styles */
+form {
+  padding: 1rem 0;
+}
+
+form input {
+  width: 100%;
+  padding: .3rem;
+  border: 1px solid var(--pale-dogwood);
+  border-radius: .5rem;
+}
+
+form button:nth-of-type(2) {
+  display: none;
+}
+
+/* Styles for displayed notes in dashboard */
+
+ul li {
+  list-style-type: none;
+}
+
+.user-note {
+  display: flex;
+  padding: .5rem 0;
+}
+
+.note-content {
+  flex-grow: 1;
+}
+
+.note-actions {
+  flex-direction: row;
+  padding-left: .5rem;
+}
+
+.note-actions form {
+  padding: 0;
+}
+
+.note-actions button {
+  margin: 0;
+}
+
+/* Footer styles */
+footer > p {
+  font-size: .5rem;
+  text-align: center;
+}

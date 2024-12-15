@@ -11,13 +11,21 @@
     <button type="submit">Add Note</button>
 </form>
 <h2>Your Notes</h2>
-<ul>
+<ul class="user-notes">
     {% for note in notes %}
-        <li>{{ note[1] }}</li>
+        <li >
+            <div class="user-note">
+                <div class="note-content"> {{ note[1] }} </div>
+                <div class="note-actions">
+                    <form method="POST" action="{{url_for('delete_note', note_id=note[0])}}" >
+                      <button type="submit">Delete<button>
+                    </form>
+                </div>
+            </div>
+        </li>
     {% else %}
         <li>No notes found. Add some!</li>
     {% endfor %}
 </ul>
 
 {% endblock %}
-
