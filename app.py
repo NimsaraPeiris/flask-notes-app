@@ -14,8 +14,15 @@ app = Flask(__name__)
 
 # Load Secret keys
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
-app.config['DEBUG'] = False  # Disable debug mode for production
-app.config['ENV'] = 'production'  # Set the environment to production
+flask_env = os.getenv('FLASK_ENV', 'production')
+
+# Enable Debugging only in Development
+if flask_env == 'development':
+    app.config['DEBUG'] = True
+    app.config['ENV'] = 'development'
+else:
+    app.config['DEBUG'] = False
+    app.config['ENV'] = 'production'
 
 # Enable Flask's logging in production
 if not app.debug:
@@ -24,7 +31,11 @@ if not app.debug:
     app.logger.addHandler(handler)
 
 # Get the current working directory and append database/database.db path
-db_path = os.path.join(os.getcwd(), "database", "database.db")
+#db_path = os.path.join(os.getcwd(), "database", "database.db")
+if os.path.exists('/.dockerenv'):  # Check if running in Docker
+    db_path = '/app/database/database.db'  # Path to the volume in Docker
+else:
+    db_path = os.path.join(os.getcwd(), 'database', 'database.db')
 
 def init_db():    
     if not os.path.exists(db_path):
@@ -161,6 +172,33 @@ def add_note():
 
     return redirect(url_for("dashboard"))
 
+@app.route("/delete_note/<int:note_id>", methods=["POST"])
+def delete_note(note_id):
+    # Check if the user is logged in
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    user_id = session["user_id"]
+
+    # Remove selected note from the database
+    with sqlite3.connect(db_path) as conn:
+        cursor = conn.cursor()
+
+        # check if the note exists and belongs to the user
+        cursor.execute(
+            "SELECT * FROM notes WHERE id = ? AND user_id = ?", (note_id, user_id)
+        )
+        note = cursor.fetchone()
+        if note:
+            cursor.execute(
+                "DELETE FROM notes WHERE id = ? AND user_id = ?",(note_id, user_id) 
+                )
+            conn.commit()
+            flash("Note deleted successfully!", "success")
+        else:
+            flash("Note not found", "danger")
+
+    return redirect(url_for("dashboard"))
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)  # Remove user_id from session
@@ -172,4 +210,4 @@ def healthz():
     return jsonify({"status": "healthy"}), 200
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=False)
+  app.run(host='0.0.0.0', port=5000, debug=True)
