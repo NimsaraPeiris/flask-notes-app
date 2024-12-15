@@ -3,7 +3,9 @@
 ### Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Setup and Run Locally](#setup-and-run-locally)
+- [Run locally](#Run-locally)
+- [Run locally with docker](#Run-locally-with-docker)
+- [Test the k8s deployment Locally](#Test-the-k8s-deployment-locally)
 - [Troubleshooting](#troubleshooting)
 
 ### Prerequisites
@@ -13,12 +15,60 @@
 - [Minikube](https://minikube.sigs.k8s.io/docs/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-### Setup and run locally
+### Run locally
 
-1. Clone the repository to your local machine:
+> NOTE: You need to install [uv](https://docs.astral.sh/uv/) package manager for local testing without docker.
+
+1. clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/Chamal1120/flask-notes-app.git
+git clone https://github.com/chamal1120/flask-notes-app.git
+cd flask-notes-app
+```
+
+2. Install dependancies:
+
+```bash
+uv sync
+```
+
+3. Run the app:
+
+```bash
+uv run flask run
+```
+
+4. Now the app is accessible at `localhost:5000`.
+
+### Run locally with docker
+
+1. clone the repository to your local machine (if you already haven't):
+
+```bash
+git clone https://github.com/chamal1120/flask-notes-app.git
+cd flask-notes-app
+```
+
+2. Build the docker image:
+
+```bash
+docker build -t flask-notes-app .
+```
+
+3. Run the container:
+
+```bash
+docker run -v $(pwd)/database:/app/database -p 5000:5000 flask-notes-app
+```
+
+4. Now the app is accessible at `localhost:5000`.
+
+### Test the k8s deployment locally
+
+1. clone the repository to your local machine (if you already haven't):
+
+```bash
+git clone https://github.com/chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 
