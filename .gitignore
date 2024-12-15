@@ -9,6 +9,7 @@ app.log
 
 # database file
 database.db
+database/
 
 # Virtual environments
 .venv
