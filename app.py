@@ -56,9 +56,10 @@ def init_db():
         CREATE TABLE IF NOT EXISTS notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             task TEXT NOT NULL,
+            category TEXT DEFAULT 'General',
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
-            )
+        );
         """
         )
         conn.commit()
@@ -160,17 +161,20 @@ def add_note():
         return redirect(url_for("login"))
 
     task = request.form["task"]
+    category = request.form.get("category", "General")  # Default to 'General' if no category provided
     user_id = session["user_id"]
 
     # Insert the new note into the database
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO notes (task, user_id) VALUES (?, ?)", (task, user_id)
+            "INSERT INTO notes (task, user_id, category) VALUES (?, ?, ?)",
+            (task, user_id, category),
         )
         conn.commit()
 
     return redirect(url_for("dashboard"))
+
 
 @app.route("/delete_note/<int:note_id>", methods=["POST"])
 def delete_note(note_id):
@@ -210,4 +214,4 @@ def healthz():
     return jsonify({"status": "healthy"}), 200
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

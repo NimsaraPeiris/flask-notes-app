@@ -11,6 +11,8 @@
     <button type="submit">Add Note</button>
 </form>
 <h2>Your Notes</h2>
+<label for="category">Category:</label>
+<input type="text" id="category" name="category" placeholder="Enter category (optional)">
 <ul class="user-notes">
     {% for note in notes %}
         <li >
@@ -18,7 +20,7 @@
                 <div class="note-content"> {{ note[1] }} </div>
                 <div class="note-actions">
                     <form method="POST" action="{{url_for('delete_note', note_id=note[0])}}" >
-                      <button type="submit">Delete<button>
+                        <button type="submit">Delete<button>
                     </form>
                 </div>
             </div>
