@@ -16,3 +16,6 @@ database/
 
 # environment Variables
 .env
+
+# node modules
+node_modules/
