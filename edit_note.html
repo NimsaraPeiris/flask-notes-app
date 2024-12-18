@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Edit Note{% endblock %}
+{% block content %}
+<h2>Edit Note</h2>
+<form method="post">
+    <label for="task">Task:</label>
+    <input type="text" id="task" name="task" value="{{ note[1] }}" required>
+    <br>
+    <button type="submit">Update Note</button>
+</form>
+{% endblock %}

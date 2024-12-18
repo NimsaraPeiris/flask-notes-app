@@ -6,23 +6,28 @@
 <h3>Add a Note</h3>
 <form method="post" action="{{ url_for('add_note') }}">
     <label for="task">Task:</label>
-    <input type="text" id="task" name="task" required>
-    <br>
+    <input type="text" id="task" name="task" placeholder="Enter the task" required>
+    <br><br>
+    <label for="category">Description:</label>
+    <input type="text" id="category" name="category" placeholder="Enter description (optional)">
+    <br><br>
     <button type="submit">Add Note</button>
 </form>
+
 <h2>Your Notes</h2>
-<label for="category">Category:</label>
-<input type="text" id="category" name="category" placeholder="Enter category (optional)">
 <ul class="user-notes">
     {% for note in notes %}
-        <li >
+        <li>
             <div class="user-note">
-                <div class="note-content"> {{ note[1] }} </div>
+                <div class="note-content"> <strong> {{ note[1] }} </strong> 
+                <br>
+                <strong></strong> {{ note[3] }}
+            </div>
                 <div class="note-actions">
-                    <form method="POST" action="{{url_for('delete_note', note_id=note[0])}}" >
-                        <button type="submit">Delete<button>
+                    <form method="POST" action="{{ url_for('delete_note', note_id=note[0]) }}">
+                        <button type="submit">Delete</button>
                     </form>
-                </div>
+                </div>      
             </div>
         </li>
     {% else %}
