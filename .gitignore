@@ -8,7 +8,6 @@ wheels/
 app.log
 
 # database file
-database.db
 database/database.db
 
 # Virtual environments
