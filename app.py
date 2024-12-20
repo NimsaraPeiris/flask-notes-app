@@ -55,11 +55,11 @@ def init_db():
             """
         CREATE TABLE IF NOT EXISTS notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            task TEXT NOT NULL,
-            category TEXT DEFAULT 'General',
+            title TEXT NOT NULL,
+            description TEXT DEFAULT 'General',
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
-        );
+        )
         """
         )
         conn.commit()
@@ -160,15 +160,15 @@ def add_note():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    task = request.form["task"]
-    category = request.form.get("category", "General")  # Default to 'General' if no category provided
+    task = request.form["title"]
+    category = request.form.get("description", "General")  # Default to 'General' if no category is provided
     user_id = session["user_id"]
 
     # Insert the new note into the database
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO notes (task, user_id, category) VALUES (?, ?, ?)",
+            "INSERT INTO notes (title, user_id, description) VALUES (?, ?, ?)",
             (task, user_id, category),
         )
         conn.commit()
@@ -202,6 +202,51 @@ def delete_note(note_id):
             flash("Note not found", "danger")
 
     return redirect(url_for("dashboard"))
+
+@app.route("/edit_note/<int:note_id>", methods=["POST"])
+def edit_note(note_id):
+    # Check if the user is logged in
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    user_id = session["user_id"]
+
+    with sqlite3.connect(db_path) as conn:
+        cursor = conn.cursor()
+
+        # Check if the selected note is available
+        cursor.execute(
+            "SELECT title, description FROM notes WHERE id = ? AND user_id = ?", (note_id, user_id)
+        )
+        note = cursor.fetchone()
+        if not note:
+            flash("Note not found", "danger")
+
+        # Pass the details and render the edit_note view
+        return render_template("edit_note.html", note_id=note_id, title=note[0], description=note[1])
+
+@app.route('/update_note/:<note_id>', methods=["POST"])
+def update_note(note_id):
+    # Check if the user is logged in
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    user_id = session["user_id"]
+
+    # Get updated data from the form
+    updated_title = request.form["title"]
+    updated_description = request.form["description"]
+
+    with sqlite3.connect(db_path) as conn:
+        cursor = conn.cursor()
+
+        # Update the note in the database
+        cursor.execute(
+            "UPDATE notes SET title = ?, description = ? WHERE id = ? AND user_id = ?",
+            (updated_title, updated_description, note_id, user_id),
+        )
+        conn.commit()
+
+    return redirect(url_for("dashboard"))
+
 
 @app.route('/logout')
 def logout():
