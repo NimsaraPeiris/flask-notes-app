@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:
     branches:
-      - main  # Trigger when code is pushed to the main branch
+      - main
 
 jobs:
   test:
@@ -22,7 +22,7 @@ jobs:
         python-version-file: ".python-version"
 
     - name: Install dependencies
-      uses: uv sync --all-extras --dev
+      run: uv sync --all-extras --dev
 
     - name: Run tests
       run: uv run pytest test_app.py
