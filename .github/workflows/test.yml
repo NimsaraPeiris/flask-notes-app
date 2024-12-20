@@ -30,8 +30,12 @@ jobs:
     - name: Create test passing tag
       if: success()
       run: |
-        git tag "tests-passing"  # Create a tag indicating tests passed
-        git push origin "tests-passing"  # Push the tag to the repository
+        git tag "tests-passing"
+        git push origin "tests-passing"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag "tests-passing"
+        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} "tests-passing"
 
     - name: Failure notification
       if: failure()
