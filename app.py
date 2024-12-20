@@ -56,7 +56,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            description TEXT DEFAULT 'General',
+            description TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
@@ -148,7 +149,7 @@ def dashboard():
     # Fetch the notes for the logged-in user
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM notes WHERE user_id = ?", (user_id,))
+        cursor.execute("SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC", (user_id,))
         user_notes = cursor.fetchall()
 
     return render_template("dashboard.html", notes=user_notes)
