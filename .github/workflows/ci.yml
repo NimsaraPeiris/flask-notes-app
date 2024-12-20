@@ -1,9 +1,11 @@
 name: Build and push the docker image
 
 on:
-  push:
-    tags:
-      - 'tests-passing'  
+  workflow_run:
+    workflows: ["Tests"]
+    types:
+     - completed
+     - success
 
 jobs:
   build-and-push:
