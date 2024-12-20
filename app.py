@@ -30,18 +30,17 @@ if not app.debug:
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
-# Initiate the db_path and db
-# For running inside Docker
+# Initiate the db_path
+# For Docker
 if os.path.exists('/.dockerenv'):
-    db_path = '/app/database/database.db'  # Path to the volume in Docker
+    db_path = '/app/database/database.db'  # Docker volume path
 else:
-    # For local running
+    # For local
     db_folder = os.path.join(os.getcwd(), 'database')
 
     # Check if the folder exists, create if not
     if not os.path.exists(db_folder):
         os.makedirs(db_folder)
-
     db_path = os.path.join(db_folder, 'database.db')
 
     app.logger.info(f"Database path is ready at: {db_path}")
@@ -83,13 +82,11 @@ def init_db():
 with app.app_context():
     init_db()
 
-
 # Function to connect to the SQLite database
-def get_db_connection():
+def get_db():
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
-
 
 # Registration
 @app.route("/register", methods=["GET", "POST"])
@@ -102,7 +99,7 @@ def register():
         hashed_password = generate_password_hash(password)
 
         # Connect to the db and insert the user
-        with sqlite3.connect(db_path) as conn:
+        with get_db() as conn:
             cursor = conn.cursor()
 
             # Check if the given username is taken
@@ -133,7 +130,7 @@ def login():
         password = request.form["password"]
 
         # Check the user credentails
-        with sqlite3.connect(db_path) as conn:
+        with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
             user = cursor.fetchone()
@@ -156,9 +153,11 @@ def dashboard():
     user_id = session["user_id"]
 
     # Fetch the notes for the logged-in user
-    with sqlite3.connect(db_path) as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC", (user_id,))
+        cursor.execute(
+            "SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC", (user_id,)
+        )
         user_notes = cursor.fetchall()
 
     return render_template("dashboard.html", notes=user_notes)
@@ -171,11 +170,11 @@ def add_note():
         return redirect(url_for("login"))
 
     task = request.form["title"]
-    category = request.form.get("description", "General")  # Default to 'General' if no category is provided
+    category = request.form.get("description")
     user_id = session["user_id"]
 
     # Insert the new note into the database
-    with sqlite3.connect(db_path) as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO notes (title, user_id, description) VALUES (?, ?, ?)",
@@ -194,7 +193,7 @@ def delete_note(note_id):
     user_id = session["user_id"]
 
     # Remove selected note from the database
-    with sqlite3.connect(db_path) as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # check if the note exists and belongs to the user
@@ -220,7 +219,7 @@ def edit_note(note_id):
         return redirect(url_for("login"))
     user_id = session["user_id"]
 
-    with sqlite3.connect(db_path) as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # Check if the selected note is available
@@ -234,7 +233,7 @@ def edit_note(note_id):
         # Pass the details and render the edit_note view
         return render_template("edit_note.html", note_id=note_id, title=note[0], description=note[1])
 
-@app.route('/update_note/:<note_id>', methods=["POST"])
+@app.route('/update_note/<int:note_id>', methods=["POST"])
 def update_note(note_id):
     # Check if the user is logged in
     if "user_id" not in session:
@@ -245,7 +244,7 @@ def update_note(note_id):
     updated_title = request.form["title"]
     updated_description = request.form["description"]
 
-    with sqlite3.connect(db_path) as conn:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # Update the note in the database

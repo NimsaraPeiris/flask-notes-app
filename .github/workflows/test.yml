@@ -1,0 +1,39 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main  # Trigger when code is pushed to the main branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: ".python-version"
+
+    - name: Install dependencies
+      uses: uv sync --all-extras --dev
+
+    - name: Run tests
+      run: uv run pytest test_app.py
+
+    - name: Create test passing tag
+      if: success()
+      run: |
+        git tag "tests-passing"  # Create a tag indicating tests passed
+        git push origin "tests-passing"  # Push the tag to the repository
+
+    - name: Failure notification
+      if: failure()
+      run: |
+        echo "Tests failed. Docker build will not trigger." 
