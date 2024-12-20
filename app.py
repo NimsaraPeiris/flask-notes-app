@@ -30,12 +30,21 @@ if not app.debug:
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
-# Get the current working directory and append database/database.db path
-#db_path = os.path.join(os.getcwd(), "database", "database.db")
-if os.path.exists('/.dockerenv'):  # Check if running in Docker
+# Initiate the db_path and db
+# For running inside Docker
+if os.path.exists('/.dockerenv'):
     db_path = '/app/database/database.db'  # Path to the volume in Docker
 else:
-    db_path = os.path.join(os.getcwd(), 'database', 'database.db')
+    # For local running
+    db_folder = os.path.join(os.getcwd(), 'database')
+
+    # Check if the folder exists, create if not
+    if not os.path.exists(db_folder):
+        os.makedirs(db_folder)
+
+    db_path = os.path.join(db_folder, 'database.db')
+
+    app.logger.info(f"Database path is ready at: {db_path}")
 
 def init_db():    
     if not os.path.exists(db_path):
