@@ -1,6 +1,7 @@
 ## A Simple Notes app for the Cloud application Development Module: Group project
 
 GitHub Actions(CI/CD) Status: <br>
+![Build Status](https://github.com/Chamal1120/flask-notes-app/actions/workflows/test.yml/badge.svg)
 ![Build Status](https://github.com/Chamal1120/flask-notes-app/actions/workflows/ci.yml/badge.svg)
 
 ##
