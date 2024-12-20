@@ -22,7 +22,7 @@ GitHub Actions(CI/CD) Status: <br>
 
 ### Run locally
 
-> NOTE: You need to install [uv](https://docs.astral.sh/uv/) package manager for local testing without docker.
+> NOTE: You need to install [uv](https://docs.astral.sh/uv/) package manager and [sqlite3](https://www.sqlite.org/) for local testing without docker.
 
 1. clone the repository to your local machine:
 
@@ -31,19 +31,34 @@ git clone https://github.com/Chamal1120/flask-notes-app.git
 cd flask-notes-app
 ```
 
-2. Install dependancies:
+2. Install the dependancies:
 
 ```bash
 uv sync
 ```
 
-3. Run the app:
+3. Enable the flask debug mode to get hot reload working.
+
+
+For Unix
+```bash
+export FLASK_DEBUG=1 # Set the variable to 1 in the current terminal session
+```
+
+For Windows
+```powershell
+$env:FLASK_DEBUG=1 # Set the variable to 1 in the current powershell session
+```
+
+_NOTE: If you want to make it global (means you don't like to set it everytime before you run) add it to your shell configuration._
+
+4. Run the app:
 
 ```bash
 uv run flask run
 ```
 
-4. Now the app is accessible at `localhost:5000`.
+5. Now the app is accessible at `localhost:5000`.
 
 ### Run locally with docker
 
