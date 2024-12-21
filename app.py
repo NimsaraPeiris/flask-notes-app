@@ -45,7 +45,7 @@ else:
 
     app.logger.info(f"Database path is ready at: {db_path}")
 
-def init_db():    
+def init_db():
     if not os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
@@ -65,6 +65,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             description TEXT,
+            status TEXT DEFAULT 'To Do',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
@@ -75,7 +76,20 @@ def init_db():
         conn.close()
         app.logger.info("Database and tables created successfully!")
     else:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Check if the `status` column exists, and add it if missing
+        cursor.execute("PRAGMA table_info(notes)")
+        columns = [column[1] for column in cursor.fetchall()]
+        if "status" not in columns:
+            cursor.execute("ALTER TABLE notes ADD COLUMN status TEXT DEFAULT 'To Do'")
+            conn.commit()
+            app.logger.info("Added missing 'status' column to notes table.")
+
+        conn.close()
         app.logger.info("Database already exists")
+
 
 
 # Initialize the databse
@@ -160,6 +174,7 @@ def dashboard():
         )
         user_notes = cursor.fetchall()
 
+
     return render_template("dashboard.html", notes=user_notes)
 
 
@@ -171,18 +186,45 @@ def add_note():
 
     task = request.form["title"]
     category = request.form.get("description")
+    status = request.form.get("status", "To Do")  # Get the status from the form (default to "To Do")
     user_id = session["user_id"]
 
     # Insert the new note into the database
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO notes (title, user_id, description) VALUES (?, ?, ?)",
-            (task, user_id, category),
+            "INSERT INTO notes (title, user_id, description, status) VALUES (?, ?, ?, ?)",
+            (task, user_id, category, status),
         )
         conn.commit()
 
     return redirect(url_for("dashboard"))
+
+@app.route('/get_tasks', methods=['GET'])
+def get_tasks():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user_id = session["user_id"]
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM notes WHERE user_id = ?", (user_id,))
+        tasks = cursor.fetchall()
+        
+    return jsonify({'tasks': [dict(task) for task in tasks]})
+
+@app.route('/update_task_status/<int:task_id>/<string:new_status>', methods=['POST'])
+def update_task_status(task_id, new_status):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user_id = session["user_id"]
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE notes SET status = ? WHERE id = ? AND user_id = ?", (new_status, task_id, user_id))
+        conn.commit()
+
+    return '', 200
 
 
 @app.route("/delete_note/<int:note_id>", methods=["POST"])
