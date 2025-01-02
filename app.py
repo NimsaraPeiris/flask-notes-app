@@ -12,6 +12,7 @@ load_dotenv()
 # Initialize the flask app
 app = Flask(__name__)
 
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 # Load Secret keys
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 flask_env = os.getenv('FLASK_ENV', 'production')

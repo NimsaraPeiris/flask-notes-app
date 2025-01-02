@@ -3,30 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
     <title>{% block title %}Flask App{% endblock %}</title>
 </head>
-<body>
-    <header>
-        <h1>Simple Notes App</h1>
-        <nav>
-            <ul>
+<body class="flex flex-col min-h-screen text-white bg-gradient-to-br from-blue-700 to-blue-900">
+    <header class="bg-blue-800 shadow-md">
+        <div class="container px-4 py-6 mx-auto">
+            <h1 class="text-4xl font-bold text-center text-teal-200">Simple Notes App</h1>
+        </div>
+        <nav class="bg-blue-700">
+            <ul class="flex justify-center gap-4 py-3">
                 {% if session.get('user_id') %}
-                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('dashboard') }}" class="text-teal-300 transition hover:text-white">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="text-teal-300 transition hover:text-white">Logout</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                    <li><a href="{{ url_for('login') }}" class="text-teal-300 transition hover:text-white">Login</a></li>
+                    <li><a href="{{ url_for('register') }}" class="text-teal-300 transition hover:text-white">Register</a></li>
                 {% endif %}
             </ul>
         </nav>
     </header>
-    <main>
-        {% block content %}
-        {% endblock %}
+    
+    <!-- Main content -->
+    <main class="container flex-grow px-4 py-8 mx-auto">
+        <div class="bg-[url('/static/images/mesh-gradient.png')] bg-cover bg-center text-gray-800 p-6 rounded-3xl shadow-white">
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
-    <footer>
-        <p>&copy; SLTC Cloud Application Development Assignment</p>
+
+    <!-- Footer  -->
+    <footer class="py-4 bg-blue-800">
+        <p class="text-center text-teal-300">&copy; SLTC Cloud Application Development Assignment</p>
     </footer>
 </body>
 </html>
