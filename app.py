@@ -117,12 +117,14 @@ def register():
             )
             conn.commit()
 
+            
+
         flash("Account created successfully!", "success")
         return redirect(url_for("login"))
 
     return render_template("registration.html")
 
-
+# Login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -144,7 +146,7 @@ def login():
     return render_template("login.html")
 
 
-# Main route
+# Dashboard
 @app.route("/", methods=["GET", "POST"])
 def dashboard():
     if "user_id" not in session:
@@ -184,7 +186,7 @@ def add_note():
 
     return redirect(url_for("dashboard"))
 
-
+# Delete note
 @app.route("/delete_note/<int:note_id>", methods=["POST"])
 def delete_note(note_id):
     # Check if the user is logged in
@@ -212,6 +214,7 @@ def delete_note(note_id):
 
     return redirect(url_for("dashboard"))
 
+# Edit note
 @app.route("/edit_note/<int:note_id>", methods=["POST"])
 def edit_note(note_id):
     # Check if the user is logged in
@@ -233,6 +236,7 @@ def edit_note(note_id):
         # Pass the details and render the edit_note view
         return render_template("edit_note.html", note_id=note_id, title=note[0], description=note[1])
 
+# Update note route
 @app.route('/update_note/<int:note_id>', methods=["POST"])
 def update_note(note_id):
     # Check if the user is logged in
@@ -256,7 +260,7 @@ def update_note(note_id):
 
     return redirect(url_for("dashboard"))
 
-
+# Logout
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)  # Remove user_id from session
@@ -267,5 +271,6 @@ def logout():
 def healthz():
     return jsonify({"status": "healthy"}), 200
 
+# App bootsrap
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
