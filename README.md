@@ -116,9 +116,7 @@ cd flask-notes-app
 minikube start
 ```
 
-5. Create a secret key for the flask app in the 
-
-4. Apply the deployment.yml file that contains the app's Kubernetes configuration:
+3. Apply the deployment.yml file that contains the app's Kubernetes configuration:
 
 ```bash
 kubectl apply -f deployment.yml
@@ -126,14 +124,14 @@ kubectl apply -f deployment.yml
 
 This will create a Deployment with 3 replicas and a LoadBalancer service for external access:
 
-5. Check if the pods and services are running correctly:
+4. Check if the pods and services are running correctly:
 
 ```bash
 kubectl get pods
 kubectl get svc flask-notes-service
 ```
 
-6. Open a seperate terminal window and start Minikube tunnel to expose the service to your local machine (you should keep this running until you finish working with the app):
+5. Open a seperate terminal window and start Minikube tunnel to expose the service to your local machine (you should keep this running until you finish working with the app):
 
 ```bash
 minikube tunnel
@@ -141,7 +139,7 @@ minikube tunnel
 
 This command will set up a network route from your machine to the Kubernetes cluster.
 
-7. Check the flask-notes-service again:
+6. Check the flask-notes-service again:
 
 ```bash
 kubectl get svc flask-notes-service
@@ -149,7 +147,7 @@ kubectl get svc flask-notes-service
 
 Now you'll see an external ip is available for the service.
 
-8. Open your browser and navigate to that external ip:
+7. Open your browser and navigate to that external ip:
 
 ```
 http://<external-ip>
