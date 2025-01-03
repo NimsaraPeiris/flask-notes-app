@@ -2,7 +2,7 @@
 {% block title %}Edit Note{% endblock %}
 {% block content %}
 <div class="max-w-lg p-8 mx-auto bg-white shadow-md rounded-2xl">
-    <h2 class="mb-6 text-2xl font-bold text-center text-gray-800">Edit Note</h2>
+    <h2 class="mb-6 text-3xl font-bold text-center text-gray-800">Edit Note</h2>
     <form method="POST" action="{{url_for('update_note', note_id=note_id)}}" class="space-y-4">
         <!-- Title -->
         <div>
