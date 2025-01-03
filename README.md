@@ -16,19 +16,24 @@ GitHub Actions(CI/CD) Status: <br>
 
 ### Prerequisites
 
+#### Common
 - [Git](https://git-scm.com/)
+
+#### For local development
+- [uv](https://docs.astral.sh/uv/) 
+- [sqlite3](https://www.sqlite.org/)
+- [nodejs](https://nodejs.org/en)
+- [pnpm](https://pnpm.io/)
+
+#### For running docker image
+- [Docker](https://www.docker.com/get-started)
+
+#### For testing K8s locally
 - [Docker](https://www.docker.com/get-started)
 - [Minikube](https://minikube.sigs.k8s.io/docs/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ### Run and Develop locally
-
-#### Following additional prerequisites are needed for local development
-
-* [uv](https://docs.astral.sh/uv/) 
-* [sqlite3](https://www.sqlite.org/)
-* [nodejs](https://nodejs.org/en)
-* [pnpm](https://pnpm.io/)
 
 1. clone the repository to your local machine:
 
