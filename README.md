@@ -21,9 +21,14 @@ GitHub Actions(CI/CD) Status: <br>
 - [Minikube](https://minikube.sigs.k8s.io/docs/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-### Run locally
+### Run and Develop locally
 
-> NOTE: You need to install [uv](https://docs.astral.sh/uv/) package manager and [sqlite3](https://www.sqlite.org/) for local testing without docker.
+#### Following additional prerequisites are needed for local development
+
+* [uv](https://docs.astral.sh/uv/) 
+* [sqlite3](https://www.sqlite.org/)
+* [nodejs](https://nodejs.org/en)
+* [pnpm](https://pnpm.io/)
 
 1. clone the repository to your local machine:
 
@@ -36,10 +41,10 @@ cd flask-notes-app
 
 ```bash
 uv sync
+pnpm i
 ```
 
 3. Enable the flask debug mode to get hot reload working.
-
 
 For Unix
 ```bash
@@ -60,6 +65,14 @@ uv run flask run
 ```
 
 5. Now the app is accessible at `localhost:5000`.
+
+#### NOTE: If you are adding custom stylings, themes or color pallets to tailwind, you need to rebuild the tailwind css file.
+
+The following command will start a service that listens for changes in the main css file and builds the tailwind css file.
+
+```bash
+npx tailwindcss -i ./src/input.css -o ./static/styles.css --watch
+```
 
 ### Run locally with docker
 
